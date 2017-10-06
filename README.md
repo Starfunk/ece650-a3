@@ -1,4 +1,4 @@
-# ECE650 : Assignment 2
+# ECE650 : Assignment 3
 
 Replace FIRST_NAME, LAST_NAME, WATIAM, and STUDENT_ID, EMAIL in
 `user.yml` by your first and last name, WatIAM id, student number, and
