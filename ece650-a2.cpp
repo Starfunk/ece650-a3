@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <signal.h>
 
 #include "headers/node.h"
 #include "headers/amatrix.h"
@@ -13,14 +14,25 @@ int main() {
   while (!std::cin.eof()) {
     // Read a line of input until EOL and store in a string.
     std::string line;
-    std::cout << "THIS IS LINE in A2" << line << std::endl;
+
     // Get the input line. The last character is the newline '\n'.
     std::getline(std::cin, line);
+
+    // Don't print the s command, since it is already printed when the user
+    // enters it in the driver process.
+    if (line[0] != 's') {
+      std::cout << line << std::endl;
+    }
     // Create an input stream based on the line.
     // We will use the input stream to parse the line.
     std::istringstream input(line);
+    // if (line == "A1 FINISHED\n") {
+    //   std::cout << "A2 Finished\n";
+    //   std::cout.flush();
+    // }
 	  if (std::cin.eof()) {
-      std::cout << "EOF in A2";
+      // kill (0, SIGTERM);
+      // exit(0);
 	    break;
 	  }
     /* We expect each line to contain a list of numbers.
@@ -113,4 +125,5 @@ int main() {
 	  matrix.resetAMatrix();
     }
   }
+  return 0;
 }

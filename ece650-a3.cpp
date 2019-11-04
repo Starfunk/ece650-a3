@@ -12,15 +12,17 @@ int procB(void) {
         // read a line of input until EOL and store in a string
         std::string line;
         std::getline(std::cin, line);
+        if (std::cin.eof()) {
+          break;
+        }
         std::cout << line << std::endl;
         std::cout.flush();
     }
-    std::cout << "[B] saw EOF" << std::endl;
+    // std::cout << "[B] saw EOF" << std::endl;
     return 0;
 }
 
 int main (int argc, char **argv) {
-  char s[5000];
   std::vector<pid_t> kids;
 
   // Initialize pipe from Rgen to A1
@@ -40,7 +42,6 @@ int main (int argc, char **argv) {
   child_pid = fork();
   if(child_pid == 0)
   {
-      std::cout << "WE IN PYTHON CHILD\n";
       dup2(RGENtoA1[0], STDIN_FILENO);
       close(RGENtoA1[0]);
       close(RGENtoA1[1]);
@@ -48,17 +49,6 @@ int main (int argc, char **argv) {
       dup2(A1toA2[1], STDOUT_FILENO);
       close(A1toA2[0]);
       close(A1toA2[1]);
-
-      // dup2(A1toA3[1], STDOUT_FILENO);
-      // close(A1toA3[0]);
-      // close(A1toA3[1]);
-
-
-
-      // dup2(A1toOUT[1], STDOUT_FILENO);
-      // close(A1toA2[0]);
-      // close(A1toA2[1]);
-
 
       char *argv1[3];
 
@@ -75,14 +65,23 @@ int main (int argc, char **argv) {
   kids.push_back(child_pid);
 
   child_pid = fork();
+  pid_t rgen = child_pid;
   if (child_pid == 0) {
     // redirect stdout to the pipe
-        std::cout << "WE IN RGEN CHILD\n";
         dup2(RGENtoA1[1], STDOUT_FILENO);
         close(RGENtoA1[0]);
         close(RGENtoA1[1]);     // Close this too!
 
         int rgen = execv("rgen",argv);
+
+        // if (rgen == 1) {
+        //   for (pid_t k : kids) {
+        //       int status;
+        //       kill (k, SIGTERM);
+        //       waitpid(k, &status, 0);
+        //   }
+        // }
+
         return rgen;
   }
   else if (child_pid < 0) {
@@ -94,7 +93,6 @@ int main (int argc, char **argv) {
    child_pid = fork();
    if (child_pid == 0) {
      // redirect stdout to the pipe
-         std::cout << "WE IN A2 CHILD\n";
          dup2(A1toA2[0], STDIN_FILENO);
          close(A1toA2[0]);
          close(A1toA2[1]);     // Close this too!
@@ -108,54 +106,33 @@ int main (int argc, char **argv) {
     }
     kids.push_back(child_pid);
 
-    // Starts a process that lets us see output from A1
-    child_pid = fork();
-    if (child_pid == 0) {
+    //UNCOMMENT THIS! THIS IS IMPORTANT!
+  // dup2(A1toA2[1], STDOUT_FILENO);
+  // close(A1toA2[0]);
+  // close(A1toA2[1]);
 
-      // dup2(A1toA3[0], STDIN_FILENO);
-      // close(A1toA3[0]);
-      // close(A1toA3[1]);
-      // redirect stdout to the pipe
-      // THIS seems to work, if this is on then we can see the output of A1's program
-      dup2(A1toA2[0], STDIN_FILENO);
-      close(A1toA2[0]);
-      close(A1toA2[1]);
-      // while (!std::cin.eof()) {
-      //     // read a line of input until EOL and store in a string
-      //     std::string line;
-      //     std::getline(std::cin, line);
-      //     std::cout << "WE ARE IN A1's reading process" <<line << std::endl;
-      //     std::cout.flush();
-      // }
-    }
-    else if (child_pid < 0) {
-         std::cerr << "Error: could not fork rgen\n";
-         return 1;
-     }
-     kids.push_back(child_pid);
+  child_pid = fork();
+  if (child_pid == 0) {
+    // redirect stdout to the pipe
+        dup2(A1toA2[1], STDOUT_FILENO);
+        close(A1toA2[0]);
+        close(A1toA2[1]);
+        int you = procB();
+        return you;
+  }
+  else if (child_pid < 0) {
+       std::cerr << "Error: could not fork rgen\n";
+       return 1;
+   }
+   kids.push_back(child_pid);
 
-  dup2(A1toA2[1], STDOUT_FILENO);
-  close(A1toA2[0]);
-  close(A1toA2[1]);
-
-  int you = procB();
-
-
-  pid_t wpid;
-  int status = 0;
-  while ((wpid = wait(&status)) > 0);
-  // send kill signal to all children
+  int status;
+  waitpid(-1,&status,0);
   for (pid_t k : kids) {
       int status;
       kill (k, SIGTERM);
       waitpid(k, &status, 0);
   }
-
-  //
-  //   std::cout << "WE GET TO END OF ECE A3\n";
-  //   //
-  //   // std::cout << "Replace with your solution for the main "
-  //   //           << "driver program of Assignment 3\n";
 
     return 0;
 }

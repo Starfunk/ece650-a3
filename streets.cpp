@@ -11,10 +11,13 @@
 Streets::Streets(void) {}
 
 // Constructor that randomly generates the streets.
-Streets::Streets(int s, int n, int c) {
-  // if (!s) {
-  //   s = 10;
-  // }
+Streets::Streets(int s, int n, int l, int c) {
+
+  // std::cout << "s " << s << "\n";
+  // std::cout << "n: " << n << "\n";
+  // std::cout << "l: " << l << "\n";
+  // std::cout << "c: " << c << "\n";
+
   unsigned int tries = 0;
   // Check that input is valid.
   if (s < 2) {
@@ -25,15 +28,24 @@ Streets::Streets(int s, int n, int c) {
     std::cerr << "Error: n is less than 5.\n";
     exit(1);
   }
+  if (l < 5) {
+    std::cerr << "Error: l is less than 5.\n";
+    exit(1);
+  }
   if (c < 1) {
     std::cerr << "Error: c is less than 1.\n";
     exit(1);
   }
 
   this->num_streets = LineSeg::random(2,s);
-  // std::cout << "number of streets: " << this->num_streets << "\n";
   this->num_segments = LineSeg::random(5,n);
-  // this->num_range = LineSeg::random(-c,c);
+  this->num_wait = LineSeg::random(5,l);
+
+  // std::cout << "This is num_streets: " << this->num_streets << "\n";
+  // std::cout << "This is num_segments: " << this->num_segments << "\n";
+  // std::cout << "This is num_wait: " << this->num_wait << "\n";
+  // std::cout << "This could be c: " << LineSeg::random(-c,c) << "\n";
+
 
   for (int i = 0; i < this->num_streets; i++) {
     Street street(c, this->num_segments);
@@ -44,17 +56,13 @@ Streets::Streets(int s, int n, int c) {
         if (tries > 25) {
           std::cerr << "Error: Could not generate a valid set"
                     << " of streets in 25 tries.\n";
-          exit(1);
+          exit(3);
         }
       }
     }
     this->streets.push_back(street);
-    // this->street_names.push_back(i);
   }
 
-  // for (int i = 0; i < this->num_streets; i++) {
-  //   this->streets[i].printCoords();
-  // }
 }
 
 void Streets::printAddStreets(void) {
@@ -105,6 +113,10 @@ void Streets::printRemoveStreets(void) {
 
 void Streets::printGraph(void) {
   std::cout << "g\n";
+}
+
+int Streets::getNumWait(void) {
+  return this->num_wait;
 }
 
 // Returns true if the input street does overlap with one of the streets
