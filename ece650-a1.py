@@ -24,8 +24,14 @@ def euclidean_distance(p1, p2):
 def check_intersection(p1, p2, p3, p4):
   line1 = Line(p1,p2)
   line2 = Line(p3,p4)
-  if line2.m == line1.m and line1.b != line2.b:
+  if line2.m == line1.m
+  # if line2.m == line1.m and line1.b != line2.b:
     return False
+  #
+  # # Don't handle overlaps. In this case, output that there is no intersection.
+  # elif line2.m == line1.m and line1.b == line2.b:
+  #   return False
+
 
   elif line1.m == 'v':
     x = line1.x

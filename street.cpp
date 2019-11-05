@@ -88,15 +88,24 @@ Street::Street(int range, int segments) {
   this->linesegs.push_back(lineseg);
 
   for (int j = 2; j < coords.size() - 2; j = j + 2) {
+    tries = 0;
     LineSeg lineseg(coords[j],coords[j+1],coords[j+2],coords[j+3]);
 
+    bool is_valid = this->checkValid(lineseg);
     // std::cout << "checkValid: " << this->checkValid(lineseg) << "\n";
-    while (this->checkValid(lineseg) == false) {
-      // std::cout << this->checkValid(lineseg);
+    while (is_valid == false) {
+      std::cerr << "Finding valid line segment!\n";
       this->coords[j+2] = LineSeg::random(lower,upper);
       this->coords[j+3] = LineSeg::random(lower,upper);
+
       LineSeg lineseg(this->coords[j],this->coords[j+1],
                       this->coords[j+2],this->coords[j+3]);
+
+      is_valid = this->checkValid(lineseg);
+      std::cerr << "Tries: " << tries << "\n";
+      std::cerr << "is_valid: " << is_valid << "\n";
+
+      // std::cerr << "This is boolean value of lineseg: " << this->checkValid(lineseg) << "\n";
       tries += 1;
       if (tries > 25) {
         std::cerr << "Error: Could not generate a valid line segment in 25 tries.\n";
@@ -106,9 +115,6 @@ Street::Street(int range, int segments) {
     this->linesegs.push_back(lineseg);
   }
 
-  // for (LineSeg lineseg: this->linesegs) {
-  //   lineseg.printLineSeg();
-  // }
 }
 
 void Street::printCoords(void) {

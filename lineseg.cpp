@@ -214,16 +214,29 @@ bool LineSeg::overlap(LineSeg& line) {
 
 // Display the attributes of LineSeg
 void LineSeg::printLineSeg(void) {
-  std::cout << "-------------------------------\n";
-  std::cout << "Printing line seg:\n";
-  std::cout << "x1: " << this->x1 << ", ";
-  std::cout << "y1: " << this->y1 << ", ";
-  std::cout << "x2: " << this->x2 << ", ";
-  std::cout << "y2: " << this->y2 << "\n";
-  std::cout << "flag: " << this->flag<< "\n";
-  std::cout << "y = " << this->slope<< "x + " << this->b << "\n";
-  std::cout << "-------------------------------\n";
+  std::cerr << "-------------------------------\n";
+  std::cerr << "Printing line seg:\n";
+  std::cerr << "x1: " << this->x1 << ", ";
+  std::cerr << "y1: " << this->y1 << ", ";
+  std::cerr << "x2: " << this->x2 << ", ";
+  std::cerr << "y2: " << this->y2 << "\n";
+  std::cerr << "flag: " << this->flag<< "\n";
+  std::cerr << "y = " << this->slope<< "x + " << this->b << "\n";
+  std::cerr << "-------------------------------\n";
 }
+
+// // Display the attributes of LineSeg
+// void LineSeg::printLineSeg(void) {
+//   std::cout << "-------------------------------\n";
+//   std::cout << "Printing line seg:\n";
+//   std::cout << "x1: " << this->x1 << ", ";
+//   std::cout << "y1: " << this->y1 << ", ";
+//   std::cout << "x2: " << this->x2 << ", ";
+//   std::cout << "y2: " << this->y2 << "\n";
+//   std::cout << "flag: " << this->flag<< "\n";
+//   std::cout << "y = " << this->slope<< "x + " << this->b << "\n";
+//   std::cout << "-------------------------------\n";
+// }
 
 // bool LineSeg::validLength(int& a, int& b, int& c, int& d) {
 //   while (a == c && b == d) {

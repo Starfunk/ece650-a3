@@ -18,7 +18,6 @@ Streets::Streets(int s, int n, int l, int c) {
   // std::cout << "l: " << l << "\n";
   // std::cout << "c: " << c << "\n";
 
-  unsigned int tries = 0;
   // Check that input is valid.
   if (s < 2) {
     std::cerr << "Error: s is less than 2.\n";
@@ -46,12 +45,17 @@ Streets::Streets(int s, int n, int l, int c) {
   // std::cout << "This is num_wait: " << this->num_wait << "\n";
   // std::cout << "This could be c: " << LineSeg::random(-c,c) << "\n";
 
-
+  // unsigned int tries = 0;
   for (int i = 0; i < this->num_streets; i++) {
     Street street(c, this->num_segments);
     if (this->streets.size() > 1) {
-      while (this->checkOverlap(street) == true) {
+      bool street_overlap = this->checkOverlap(street);
+      int tries = 0;
+      while (street_overlap == true) {
         Street street(c, this->num_segments);
+        street_overlap = this->checkOverlap(street);
+        std::cerr << "street_overlap: " << street_overlap << "\n";
+        std::cerr << "tries: " << tries << "\n";
         tries += 1;
         if (tries > 25) {
           std::cerr << "Error: Could not generate a valid set"
@@ -127,6 +131,10 @@ bool Streets::checkOverlap(Street street1) {
     for (Street street2: this->streets) {
       for (LineSeg lineseg2: street2.getLineSegs()) {
         if (lineseg2.overlap(lineseg1) == true) {
+          // std::cerr << "Printing lineseg1:\n";
+          // lineseg1.printLineSeg();
+          // std::cerr << "Printing lineseg2:\n";
+          // lineseg2.printLineSeg();
           overlaps = true;
           break;
         }

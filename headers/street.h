@@ -4,7 +4,7 @@
 class Street {
  public:
   Street();
-  Street(int range, int segments=5);
+  Street(int range, int segments);
   void printCoords(void);
   std::vector<LineSeg> getLineSegs(void);
   std::vector<int> getCoords(void);
