@@ -14,11 +14,13 @@ class Streets {
   bool checkOverlap(Street street);
   bool checkIntersect(Street street, int index);
   void printAddStreets(void);
-  void printAddStreetsCerr(void);
+  void printStreetsDebug(void); // When num streets in this->streets < this->num_streets
+  void printAddStreetsCerr(void); // Prints to cerr
   void printRemoveStreets(void);
   void printGraph(void);
   void generateStreetNames(void);
   int getNumWait(void);
+
  private:
   std::vector<Street> streets;
   std::vector<std::string> street_names;

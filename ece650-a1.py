@@ -43,9 +43,9 @@ def check_intersection(p1, p2, p3, p4):
     return False
   elif y > max(line2.p1[1], line2.p2[1]) or y < min(line2.p1[1], line2.p2[1]):
     return False
-  if x > max(line1.p1[0], line1.p2[0]) or y < min(line1.p1[0], line1.p2[0]):
+  if x > max(line1.p1[0], line1.p2[0]) or x < min(line1.p1[0], line1.p2[0]):
     return False
-  elif x > max(line2.p1[0], line2.p2[0]) or y < min(line2.p1[0], line2.p2[0]):
+  elif x > max(line2.p1[0], line2.p2[0]) or x < min(line2.p1[0], line2.p2[0]):
     return False
 
   return (x, y)
@@ -250,6 +250,17 @@ def build_graph(streets):
 
 def main():
     streets = {}
+
+    p1 = (0,-20)
+    p2 = (-4,13)
+    p3 = (-14,-5)
+    p4 = (4,-4)
+    # line1 = Line(p1,p2)
+    # line2 = Line(p3,p4)
+
+    intersect = check_intersection(p1,p2,p3,p4)
+    print intersect
+
     while True:
       try:
         arg = raw_input()
@@ -260,7 +271,7 @@ def main():
       if len(user_input) == 1:
         # Handle the command = 'r' case here.
         if user_input[0][0] == 'r':
-          format_user_input = re.compile("(\".+\")")     .split(line)
+          format_user_input = re.compile("(\".+\")").split(line)
           street_name_r = format_user_input[1]
           try:
             del streets[street_name_r]

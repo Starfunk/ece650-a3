@@ -73,14 +73,14 @@ int main(int argc, char** argv) {
     c_int = 20;
   }
 
-  std::cout << "s_flag: " << s_flag << "\n";
-  std::cout << "s_int: " << s_int << "\n";
-  std::cout << "n_flag: " << n_flag << "\n";
-  std::cout << "n_int: " << n_int << "\n";
-  std::cout << "l_flag: " << l_flag << "\n";
-  std::cout << "l_int: " << l_int << "\n";
-  std::cout << "c_flag: " << c_flag << "\n";
-  std::cout << "c_int: " << c_int << "\n";
+  // std::cout << "s_flag: " << s_flag << "\n";
+  // std::cout << "s_int: " << s_int << "\n";
+  // std::cout << "n_flag: " << n_flag << "\n";
+  // std::cout << "n_int: " << n_int << "\n";
+  // std::cout << "l_flag: " << l_flag << "\n";
+  // std::cout << "l_int: " << l_int << "\n";
+  // std::cout << "c_flag: " << c_flag << "\n";
+  // std::cout << "c_int: " << c_int << "\n";
 
   // LineSeg l1(12,-20,-12,17);
   // LineSeg l2(12,-20,-12,17);

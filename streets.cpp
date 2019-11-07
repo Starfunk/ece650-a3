@@ -23,16 +23,16 @@ Streets::Streets(int s, int n, int l, int c) {
   }
   // Note that since loops go to n - 1, min for num_streets should be 3 not 2.
   this->num_streets = LineSeg::random(2,s); // Define number of streets.
-
-  std::cout << "THis is num_streets: " << this->num_streets << "\n";
+  //
+  // std::cout << "THis is num_streets: " << this->num_streets << "\n";
   this->num_segments = n; // This is the upper bound for number of segs per street.
   this->num_wait = LineSeg::random(5,l); // Define number of seconds to wait.
 
   for (int i = 0; i < this->num_streets; i++) {
     bool used_overlap = false; // True if added a street in the while loop
     Street street(c, this->num_segments);
-    std::cout << "------[TOP]------ :\n";
-    street.printCoords();
+    // std::cout << "------[TOP]------ :\n";
+    // street.printCoords();
     if (this->streets.size() > 1) {
       bool street_overlap = this->checkOverlap(street);
       int tries = 0;
@@ -42,15 +42,13 @@ Streets::Streets(int s, int n, int l, int c) {
         // Note that street has not yet been added to this->streets
         Street street(c, this->num_segments);
         street_overlap = this->checkOverlap(street);
-        std::cout << "-----[IN]------: \n";
+        // std::cout << "-----[IN]------: \n";
         if (street_overlap == false) {
-          std::cout << "-----[WE IN!!!!]------: \n";
-          street.printCoords();
+          // std::cout << "-----[WE IN!!!!]------: \n";
+          // street.printCoords();
           this->streets.push_back(street);
           break;
         }
-
-
         tries += 1;
         if (tries > 25) {
           std::cerr << "Error: Could not generate a valid set"
@@ -59,9 +57,9 @@ Streets::Streets(int s, int n, int l, int c) {
         }
       }
     }
-    std::cout << "-----[BOTTOM]--- :\n";
+    // std::cout << "-----[BOTTOM]--- :\n";
     if (used_overlap == false) {
-      street.printCoords();
+
       this->streets.push_back(street);
     }
   }
@@ -74,13 +72,67 @@ Streets::Streets(int s, int n, int l, int c) {
       // std::cout << "At least one street intersects!\n";
       break;
     }
-    // std::cout << "this->nun_streets " << this->num_streets << "\n";
-    // street.printCoords();
-    // std::cout << "street_intersect: " << street_intersect << "\n";
   }
+  // If there are no intersections try 25 times to create a street so that
+  // there is one.
   if (street_intersect == false) {
-    std::cerr << "Error: No streets intersect.\n";
-    exit(3);
+    // std::cout << "WE IN STREET_INTERSECT == FALSE\n";
+    int intersect_tries = 0;
+    while (street_intersect == false) {
+      bool street_overlap;
+      bool used_overlap = false;
+
+      Street street(c, this->num_segments);
+      // std::cout << "THIS IS THE STREET WE JUST MADE:\n";
+      // street.printCoords();
+      this->streets.pop_back(); // remove last street in streets
+      street_overlap = this->checkOverlap(street);
+      // this->printStreetsDebug();
+
+      // Check that new street does not overlap with any other streets.
+      // If it does, regenerate it. Try 25 times.
+      int overlap_tries = 0;
+      while (street_overlap == true) {
+        // Note that street has not yet been added to this->streets
+        Street street(c, this->num_segments);
+        street_overlap = this->checkOverlap(street);
+        if (street_overlap == false) {
+          used_overlap = true;
+          this->streets.push_back(street);
+          break;
+        }
+        overlap_tries += 1;
+        if (overlap_tries > 25) {
+          std::cerr << "Error: Could not generate a valid set"
+                    << " of streets in 25 tries.\n";
+          exit(3);
+        }
+      }
+      if (used_overlap == false) {
+        this->streets.push_back(street);
+      }
+
+      // Check if there is an intersection
+      for (int i = 0; i < this->num_streets; i++) {
+        Street street = this->streets[i];
+        street_intersect = this->checkIntersect(street, i);
+        if (street_intersect == true) {
+          // std::cout << "At least one street intersects!\n";
+          break;
+        }
+      }
+      // If no intersection with street, increment intersection counter by 1.
+      intersect_tries += 1;
+      // std::cout << "WE ARE TRYNA GET OUT OF INTERSECTION FINDING LOOP\n";
+      if (intersect_tries > 25) {
+        // std::cerr << "NONE OF THESE STREETS INTERSECT:\n";
+        // std::cout << "num_streets: "<< this->num_streets << "\n";
+        // std::cout << "size of streets "<< this->streets.size() << "\n";
+        // this->printStreetsDebug();
+        std::cerr << "Error: No streets intersect.\n";
+        exit(3);
+      }
+    }
   }
 }
 
@@ -113,6 +165,13 @@ void Streets::printAddStreetsCerr(void) {
       }
     }
     std::cerr << "\n";
+  }
+}
+
+void Streets::printStreetsDebug (void) {
+  for (int i = 0; i < this->streets.size(); i++) {
+    Street street = this->streets[i];
+    street.printCoords();
   }
 }
 
