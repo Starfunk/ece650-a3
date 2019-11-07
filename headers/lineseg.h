@@ -3,11 +3,13 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <cmath>
 
 class LineSeg {
  public:
   LineSeg();
-  // Random number constructor.
+  // This constructs a line segment by using random numbers.
   LineSeg(int lower, int upper);
   // Manual assignment constructor.
   LineSeg(int a, int b, int c, int d);
@@ -20,7 +22,6 @@ class LineSeg {
   bool intersect(LineSeg& line);
   void printLineSeg(void);
   void setPoints(int a, int b, int c, int d);
-  // bool validLength(int& a, int& b, int& c, int& d);
 
  private:
   float slope;

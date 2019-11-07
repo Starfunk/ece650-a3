@@ -3,10 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <signal.h>
-
 #include "headers/node.h"
 #include "headers/amatrix.h"
-
 
 AMatrix matrix;
 
@@ -103,17 +101,17 @@ int main() {
     else if (command == 's') {
       unsigned s;
       unsigned t;
-      while (!input.eof()) {
-		input >> s;
-		if (input.fail()) {
-			std::cerr << "\nError: parsing s command\n";
-			break;
-		}
-		input >> t;
-		if (input.fail()) {
-			std::cerr << "\nError: parsing s command\n";
-			break;
-		}
+    while (!input.eof()) {
+		  input >> s;
+		  if (input.fail()) {
+			  std::cerr << "\nError: parsing s command\n";
+			  break;
+		  }
+		  input >> t;
+		  if (input.fail()) {
+			  std::cerr << "\nError: parsing s command\n";
+			  break;
+		  }
 	  }
 
 	  if (matrix.findShortedPath(s, t)) {
