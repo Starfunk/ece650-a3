@@ -250,17 +250,6 @@ def build_graph(streets):
 
 def main():
     streets = {}
-
-    p1 = (0,-20)
-    p2 = (-4,13)
-    p3 = (-14,-5)
-    p4 = (4,-4)
-    # line1 = Line(p1,p2)
-    # line2 = Line(p3,p4)
-
-    intersect = check_intersection(p1,p2,p3,p4)
-    print intersect
-
     while True:
       try:
         arg = raw_input()
@@ -382,36 +371,8 @@ def main():
           continue
         else:
           t = build_graph(streets)
-
-        # OLD VERSION
-          # sys.stdout.write("V = {\n")
-          # for key, value in t[0].items():
-          #   sys.stdout.write(str(key) + ": " + "(" + "{0:.2f}".format(value[0]) + "," + "{0:.2f}".format(value[1]) + ")\n")
-          # sys.stdout.write("}\n")
-          # sys.stdout.write("E = {\n")
-          # for i in range(len(t[1])):
-          #   if i < len(t[1]) - 1:
-          #     sys.stdout.write("<" + str(t[1][i][0]) + "," + str(t[1][i][1])+ ">,\n")
-          #   elif i == len(t[1]) - 1:
-          #     sys.stdout.write("<" + str(t[1][i][0]) + "," + str(t[1][i][1])+ ">\n")
-          # sys.stdout.write("}\n")
-
-        # OLD VERSION OUTPUT TO STDERR
-          # sys.stderr.write(("V = {\n")
-          # for key, value in t[0].items():
-          #   sys.stderr.write((str(key) + ": " + "(" + "{0:.2f}".format(value[0]) + "," + "{0:.2f}".format(value[1]) + ")\n")
-          # sys.stderr.write(("}\n")
-          # sys.stderr.write(("E = {\n")
-          # for i in range(len(t[1])):
-          #   if i < len(t[1]) - 1:
-          #     sys.stderr.write(("<" + str(t[1][i][0]) + "," + str(t[1][i][1])+ ">,\n")
-          #   elif i == len(t[1]) - 1:
-          #     sys.stderr.write(("<" + str(t[1][i][0]) + "," + str(t[1][i][1])+ ">\n")
-          # sys.stderr.write(("}\n")
-
-
-
-          # NEW VERSION
+          
+          # Output
           sys.stdout.write("V " + str(len(t[0])) + "\n")
           sys.stdout.write("E {")
           for i in range(len(t[1])):

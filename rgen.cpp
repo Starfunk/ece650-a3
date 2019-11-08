@@ -25,10 +25,6 @@ int main(int argc, char** argv) {
     argvector.push_back(c);
   }
 
-  // for (int i = 0; i < argvector.size(); i++) {
-  //   std::cout << argvector[i] << "\n";
-  // }
-
  /*
   * Potential for error: if letter is missing a number value, then
   * the call argvector[i+1] could get access to memory I don't want it to
@@ -57,9 +53,6 @@ int main(int argc, char** argv) {
     }
   }
 
-  // std::cout << "s_flag: " << s_flag << "\n";
-  // std::cout << "s_int: " << s_int << "\n";
-  // If argument was omitted, set to default.
   if (s_flag == false) {
     s_int = 10;
   }
@@ -73,65 +66,13 @@ int main(int argc, char** argv) {
     c_int = 20;
   }
 
-  // std::cout << "s_flag: " << s_flag << "\n";
-  // std::cout << "s_int: " << s_int << "\n";
-  // std::cout << "n_flag: " << n_flag << "\n";
-  // std::cout << "n_int: " << n_int << "\n";
-  // std::cout << "l_flag: " << l_flag << "\n";
-  // std::cout << "l_int: " << l_int << "\n";
-  // std::cout << "c_flag: " << c_flag << "\n";
-  // std::cout << "c_int: " << c_int << "\n";
-
-  // LineSeg l1(12,-20,-12,17);
-  // LineSeg l2(12,-20,-12,17);
-
-  // LineSeg l1(3,-16,-17,2);
-  // LineSeg l2(3,-16,-17,2);
-
-  // LineSeg l1(-17,2,-15,-1);
-  // LineSeg l2(-17,2,-15,-1);
-
-  // LineSeg l1(-15,-1,-14,-18);
-  // LineSeg l2(-15,-1,-14,-18);
-
-  // LineSeg l1(-15,-1,-14,-18);
-  // LineSeg l2(-14,-18,2,-19);
-  // bool t = l1.intersect(l2);
-  // std::cout << t << "\n";
-  // LineSeg l3(13,-1,-2,-3);
-  // LineSeg l4(-2,-3,5,7);
-  // bool f = l3.intersect(l4);
-  // std::cout << f << "\n";
-  // exit(1);
-  //
-  // LineSeg l1(1,1,2,3);
-  // LineSeg l2(2,3,-6,1);
-  //
-  // LineSeg l1(12,-20,-12,17);
-  // LineSeg l2(-12,17,2,7);
-  //
-  // std::cout << "Example of overlap: " << l1.overlap(l2) << "\n";
-  // std::cout << "Example of no intersection: " << l1.intersect(l2) << "\n";
-  //
-  // std::cout << "Example of overlap: " << l2.overlap(l1) << "\n";
-  // std::cout << "Example of no intersection: " << l4.intersect(l3) << "\n";
-
-  // // TESTING STREETS:
-  // Street street(10, 5);
-  // for (LineSeg lineseg : street.getLineSegs()) {
-  //   lineseg.printLineSeg();
-  // }
-  // street.printCoords();
-
-
   while (true) {
     // Create streets with command line input.
     Streets streets(s_int,n_int,l_int,c_int);
     streets.generateStreetNames();
     std::cout.flush();
-    // Outputs a "name of street" (x1,y1) (x2,y2) for all streets.
+    // Output: a "name of street" (x1,y1) (x2,y2) for all streets.
     streets.printAddStreets();
-    // streets.printAddStreetsCerr();
     std::cout.flush();
     // Outputs "g".
     streets.printGraph();
@@ -141,6 +82,8 @@ int main(int argc, char** argv) {
     streets.printRemoveStreets();
     std::cout.flush();
 
+    // This code block makes it so if rgen is run on its own, EOF will terminate
+    // the program.
     struct pollfd fds;
         int ret;
         fds.fd = 0; /* this is STDIN */

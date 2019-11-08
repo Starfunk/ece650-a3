@@ -9,8 +9,6 @@ Street::Street(int range, int segments) {
   int upper = range;
   unsigned int segment_count = 0;
   unsigned int tries = 0;
-  // std::cout << "THIS IS SEGMENTS: " << segments << "\n";
-  // Since loop goes to segments - 1, add one to go to segments.
   int line_segments = LineSeg::random(1,segments); // n option
 
   int x_a = LineSeg::random(lower,upper);

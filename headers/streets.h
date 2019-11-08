@@ -27,9 +27,9 @@ class Streets {
   std::vector<std::string> alphabet = {"a","b","c","d","e","f","g","h","i","j",
                                        "k","l","m","n","o","p","q","r","s","t",
                                        "u","v","w","x","y","z"};
-  int num_streets;
-  int num_segments; // upper bound on segments
-  int num_wait;
+  int num_streets; // Defines the number of streets
+  int num_segments; // Upper bound on segments
+  int num_wait; // Defines how long rgen should sleep for
 };
 
 #endif
