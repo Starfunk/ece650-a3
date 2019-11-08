@@ -1,13 +1,6 @@
-#include <iostream>
-#include <vector>
-#include <fstream>
-#include "headers/lineseg.h"
 #include "headers/street.h"
 
-
-
-
-// Constructor
+// Base constructor
 Street::Street(void) {}
 
 // Constructor that randomly generates the street
@@ -16,11 +9,7 @@ Street::Street(int range, int segments) {
   int upper = range;
   unsigned int segment_count = 0;
   unsigned int tries = 0;
-  // NEED TO CHECK THAT Segments > 5, do the handling in rgen
-  // segments determines the number of line segments in the street
-  if (segments >= 5) {
-    segments = LineSeg::random(5,segments);
-  }
+  int line_segments = LineSeg::random(1,segments); // n option
 
   int x_a = LineSeg::random(lower,upper);
   int y_a = LineSeg::random(lower,upper);
@@ -43,7 +32,7 @@ Street::Street(int range, int segments) {
   this->coords.push_back(y_b);
   segment_count += 1;
 
-  while (segment_count < segments) {
+  while (segment_count < line_segments) {
     //  Create next set of coordinates
     x_a = LineSeg::random(lower,upper);
     y_a = LineSeg::random(lower,upper);
@@ -59,7 +48,7 @@ Street::Street(int range, int segments) {
     this->coords.push_back(x_a);
     this->coords.push_back(y_a);
     segment_count += 1;
-    if (segment_count == segments) {
+    if (segment_count == line_segments) {
       break;
     }
 
@@ -78,7 +67,7 @@ Street::Street(int range, int segments) {
     this->coords.push_back(x_b);
     this->coords.push_back(y_b);
     segment_count += 1;
-    if (segment_count == segments) {
+    if (segment_count == line_segments) {
       break;
     }
   }
@@ -92,20 +81,14 @@ Street::Street(int range, int segments) {
     LineSeg lineseg(coords[j],coords[j+1],coords[j+2],coords[j+3]);
 
     bool is_valid = this->checkValid(lineseg);
-    // std::cout << "checkValid: " << this->checkValid(lineseg) << "\n";
+    // If the street is not valid, regenerate until it is valid.
     while (is_valid == false) {
-      std::cerr << "Finding valid line segment!\n";
       this->coords[j+2] = LineSeg::random(lower,upper);
       this->coords[j+3] = LineSeg::random(lower,upper);
 
       LineSeg lineseg(this->coords[j],this->coords[j+1],
                       this->coords[j+2],this->coords[j+3]);
-
       is_valid = this->checkValid(lineseg);
-      std::cerr << "Tries: " << tries << "\n";
-      std::cerr << "is_valid: " << is_valid << "\n";
-
-      // std::cerr << "This is boolean value of lineseg: " << this->checkValid(lineseg) << "\n";
       tries += 1;
       if (tries > 25) {
         std::cerr << "Error: Could not generate a valid line segment in 25 tries.\n";
@@ -142,17 +125,18 @@ std::vector<int> Street::getCoords(void) {
 // line segs on the street. Return true if valid, false otherwise.
 bool Street::checkValid(LineSeg& lineseg) {
   bool valid = true;
-
   // End the loop before testing the final line segment in linesegs, since by
   // definition it will intersect will the input lineseg.
   for (int i = 0; i < this->linesegs.size(); i++) {
     if (lineseg.overlap(this->linesegs[i]) == true) {
-      // std::cout << "PRINTING INTERSECT: " << lineseg.intersect(this->linesegs[i]) << "\n";
-      // std::cout << "PRINTING OVERLAP: " << lineseg.overlap(this->linesegs[i]) << "\n";
+      valid = false;
+      break;
+    }
+    if (i != this->linesegs.size() - 1 &&
+        lineseg.intersect(this->linesegs[i]) == true) {
       valid = false;
       break;
     }
   }
-
   return valid;
 }

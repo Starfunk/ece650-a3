@@ -1,5 +1,9 @@
 #ifndef STREET_H
 #define STREET_H
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include "lineseg.h"
 
 class Street {
  public:
@@ -10,10 +14,8 @@ class Street {
   std::vector<int> getCoords(void);
   bool checkValid(LineSeg& lineseg);
 
-
  private:
-  // std::vector<int> coordinates;
-  std::vector<LineSeg> linesegs;
+  std::vector<LineSeg> linesegs; // A vector of all the linesegs in the street.
   std::vector<int> coords;
 };
 

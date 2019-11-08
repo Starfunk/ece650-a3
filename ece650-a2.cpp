@@ -3,10 +3,8 @@
 #include <sstream>
 #include <vector>
 #include <signal.h>
-
 #include "headers/node.h"
 #include "headers/amatrix.h"
-
 
 AMatrix matrix;
 
@@ -101,28 +99,33 @@ int main() {
 
     // Output shortest path between vertices s and t.
     else if (command == 's') {
+      bool failedparse = false;
       unsigned s;
       unsigned t;
-      while (!input.eof()) {
-		input >> s;
-		if (input.fail()) {
-			std::cerr << "\nError: parsing s command\n";
-			break;
-		}
-		input >> t;
-		if (input.fail()) {
-			std::cerr << "\nError: parsing s command\n";
-			break;
-		}
-	  }
-
-	  if (matrix.findShortedPath(s, t)) {
-		  if (s != t) {
-		    matrix.printShortestPath();
-        std::cout.flush();
+    while (!input.eof()) {
+		  input >> s;
+		  if (input.fail()) {
+			  std::cerr << "Error: parsing s command\n";
+        failedparse = true;
+			  break;
+		  }
+		  input >> t;
+		  if (input.fail()) {
+			  std::cerr << "Error: parsing s command\n";
+        failedparse = true;
+			  break;
 		  }
 	  }
-	  matrix.resetAMatrix();
+
+    if (failedparse == false) {
+  	  if (matrix.findShortedPath(s, t)) {
+  		  if (s != t) {
+  		    matrix.printShortestPath();
+          std::cout.flush();
+  		  }
+  	  }
+  	  matrix.resetAMatrix();
+      }
     }
   }
   return 0;

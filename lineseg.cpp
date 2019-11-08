@@ -1,7 +1,3 @@
-
-#include <iostream>
-#include <vector>
-#include <fstream>
 #include "headers/lineseg.h"
 
 // Constructor
@@ -104,17 +100,42 @@ bool LineSeg::intersect(LineSeg& line) {
     else {
       intersect_x = (this->b - line.getB()) / (line.getSlope() - this->slope);
     }
-
-
     // Now test if intersection occurs within both LineSeg
-    if (intersect_x <= l1_x_max && intersect_x <= l2_x_max &&
-        intersect_x >= l1_x_min && intersect_x >= l2_x_min) {
+    // std::cout << "l1_x_max: " << l1_x_max << "\n";
+    // std::cout << "l1_x_min: " << l1_x_min << "\n";
+    // std::cout << "l2_x_max: " << l2_x_max << "\n";
+    // std::cout << "l2_x_min: " << l2_x_min << "\n";
+    // std::cout << "intersect_x: " << intersect_x << "\n";
+
+    // We have to round intersect_x, because sometimes it is supposed to store
+    // a number but will actually store a number that slightly off. for
+    // example, 2 compared to 1.9999999998.
+    float intersect_x_rounded = roundf(intersect_x * 100) / 100;
+    // int intersect_x2 = (int) intersect_x;
+
+    // if (intersect_x_rounded <= l1_x_max) {
+    //   std::cout << "1 passes\n";
+    // }
+    // if (intersect_x_rounded <= l2_x_max) {
+    //   std::cout << "2 passes\n";
+    // }
+    // if (intersect_x_rounded >= l1_x_min) {
+    //   std::cout << "3 passes\n";
+    // }
+    // if (intersect_x_rounded >= l2_x_min) {
+    //   std::cout << "4 passes\n";
+    // }
+
+
+
+    if (intersect_x_rounded <= l1_x_max && intersect_x_rounded <= l2_x_max &&
+        intersect_x_rounded >= l1_x_min && intersect_x_rounded >= l2_x_min) {
+        // std::cout << "If statement with return value of true is executed!\n";
         return true;
     }
   }
   return false;
 }
-
 
 bool LineSeg::overlap(LineSeg& line) {
   // Get the max and min value x and y values this line seg.
@@ -225,38 +246,11 @@ void LineSeg::printLineSeg(void) {
   std::cerr << "-------------------------------\n";
 }
 
-// // Display the attributes of LineSeg
-// void LineSeg::printLineSeg(void) {
-//   std::cout << "-------------------------------\n";
-//   std::cout << "Printing line seg:\n";
-//   std::cout << "x1: " << this->x1 << ", ";
-//   std::cout << "y1: " << this->y1 << ", ";
-//   std::cout << "x2: " << this->x2 << ", ";
-//   std::cout << "y2: " << this->y2 << "\n";
-//   std::cout << "flag: " << this->flag<< "\n";
-//   std::cout << "y = " << this->slope<< "x + " << this->b << "\n";
-//   std::cout << "-------------------------------\n";
-// }
-
-// bool LineSeg::validLength(int& a, int& b, int& c, int& d) {
-//   while (a == c && b == d) {
-//     a = LineSeg::random(lower,upper);
-//     y_a = LineSeg::random(lower,upper);
-//     x_b = LineSeg::random(lower,upper);
-//     y_b = LineSeg::random(lower,upper);
-//     tries++;
-//     if (tries > 25) {
-//       std::cerr << "Error: Could not generate a valid line segment in 25 tries.\n";
-//       exit(1);
-//     }
-//   }
-// }
-
 // Returns a random number between upper and lower: [lower,upper]
 int LineSeg::random(int lower, int upper) {
   // Switch to true if lower < 0.
   bool neg_range = false;
-  // For generating between -k and k
+  // For generating between -k and k, for command line option 'c'.
   if (lower < 0) {
     upper = 2 * upper;
     lower = 0;
@@ -267,26 +261,32 @@ int LineSeg::random(int lower, int upper) {
   // check that it did not fail
   if (urandom.fail()) {
       std::cerr << "Error: cannot open /dev/urandom\n";
-      return 1;
+      exit(1);
   }
   // Read a random 8-bit value.
   // Have to use read() method for low-level reading
   char ch = 'a';
   urandom.read(&ch, 1);
   unsigned int rand_num = (unsigned int)ch % (upper + 1);
+  // std::cout << "This is rand_num PRIOR: " << rand_num << "\n";
   // To keep track of number of loops.
   unsigned int tries = 0;
   // Add random numbers to rand_num such that rand_num
   // is greater than or equal to lower.
+  // std::cout << "This is upper: " << upper << "\n";
+  // std::cout << "This is lower: " << lower << "\n";
   while (rand_num < lower) {
     unsigned int rand_temp;
     urandom.read(&ch, 1);
     unsigned int upper_temp = upper - rand_num;
     rand_temp = (unsigned int)ch % (upper_temp + 1);
+    // std::cout << "This is rand_temp: " << rand_temp << "\n";
     rand_num += rand_temp;
+    // std::cout << "This is rand_num: " << rand_num << "\n";
+    // std::cout << "Tries: " << tries << "\n";
     tries += 1;
     if (tries > 25) {
-      std::cerr << "Failed to generate random number in 25 tries";
+      std::cerr << "Failed to generate random number in 25 tries HERE";
       exit(1);
     }
   }
