@@ -4,6 +4,8 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 // This function is used in a child process to parse input from the terminal
 // and send the input to A2.
